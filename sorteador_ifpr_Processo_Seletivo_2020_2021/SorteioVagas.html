@@ -2,228 +2,230 @@
 <!--Autores: Antonielly Garcia Rodrigues, Alex Helder Cordeiro de Oliveira-->
 <!--20/01/2011-->
 <!--EM CASO DE AUDITORIA:
-Da maneira como este código-fonte se encontra implementado, a semente utilizada na geração de números pseudo-aleatórios é o tempo (quantos milissegundos se passaram desde 1 de Janeiro de 1970 até o momento em que o botão "Gerar lista" foi clicado). Assim, cada vez que se clica no botão "Gerar lista", uma lista diferente é gerada, sendo o tempo o fator que torna a lista pseudo-aleatória em lista realmente aleatória.
+Da maneira como este cï¿½digo-fonte se encontra implementado, a semente utilizada na geraï¿½ï¿½o de nï¿½meros pseudo-aleatï¿½rios ï¿½ o tempo (quantos milissegundos se passaram desde 1 de Janeiro de 1970 atï¿½ o momento em que o botï¿½o "Gerar lista" foi clicado). Assim, cada vez que se clica no botï¿½o "Gerar lista", uma lista diferente ï¿½ gerada, sendo o tempo o fator que torna a lista pseudo-aleatï¿½ria em lista realmente aleatï¿½ria.
 Caso deseje verificar a autenticidade da lista impressa publicada usando a semente fixa que aparece ao final dela, siga os seguintes passos:
-1) Faça busca neste código-fonte por três asteriscos (***), contidos em comentários, e siga todas as instruções de alteração;
-2) Utilize a semente de geração de números pseudo-aleatórios que lhe foi fornecida ao final da lista impressa em papel e assinada pelas testemunhas do processo seletivo;
-3) Efetue a comparação da saída do programa com a lista impressa publicada.-->
+1) Faï¿½a busca neste cï¿½digo-fonte por trï¿½s asteriscos (***), contidos em comentï¿½rios, e siga todas as instruï¿½ï¿½es de alteraï¿½ï¿½o;
+2) Utilize a semente de geraï¿½ï¿½o de nï¿½meros pseudo-aleatï¿½rios que lhe foi fornecida ao final da lista impressa em papel e assinada pelas testemunhas do processo seletivo;
+3) Efetue a comparaï¿½ï¿½o da saï¿½da do programa com a lista impressa publicada.-->
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<title>Sorteio Eletrônico IFPR - Instituto Federal do Paraná </title>
-<script src=seedrandom.js></script>
-<script>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+  <title>Sorteio Eletronico IFPR - Instituto Federal do Parana </title>
+  <script src=seedrandom.js></script>
+  <script>
 
- function gereEImprimaResultado() {
-  var nomeCurso = document.sorteio.nomeCurso.value;
-  var nomePolo = document.sorteio.nomePolo.value;
-  var inscritos = document.sorteio.totalInscritos.value;
-  var semente;
-  if(document.sorteio.sementeManual.checked) {
-    semente = parseInt(document.sorteio.semente.value);
-  } else {
-    semente = new Date().getTime();
-  }
-  var vagas = document.sorteio.vagas.value;
-  var embaralhada = gereListaEmbaralhada(inscritos, semente);
-  //var pontoImpressao = //document.sorteio.textArea;
-  var pontoImpressao = document.getElementById('resultado');
-  imprimaResultado(nomeCurso, semente, embaralhada, vagas, pontoImpressao);
-}
- 
-function gereListaEmbaralhada(inscritos, semente){
-  Math.seedrandom(semente);
-  var consumida = new Array(inscritos);
-  var resultado = new Array(inscritos);
-  for(var i = 0; i < inscritos; i++) {
-    consumida[i] = 1+i;
-    resultado[i] = 0;
-  }
-
-  for(var i = 0; i < inscritos; i++) {
-    var aleatorio = Math.floor(Math.random()*inscritos);
-    while(consumida[aleatorio] == 0) {
-      aleatorio = (1+aleatorio)%inscritos;
+    function gereEImprimaResultado() {
+      var nomeCurso = document.sorteio.nomeCurso.value;
+      var nomePolo = document.sorteio.nomePolo.value;
+      var inscritos = document.sorteio.totalInscritos.value;
+      var semente;
+      if (document.sorteio.sementeManual.checked) {
+        semente = parseInt(document.sorteio.semente.value);
+      } else {
+        semente = new Date().getTime();
+      }
+      var vagas = document.sorteio.vagas.value;
+      var embaralhada = gereListaEmbaralhada(inscritos, semente);
+      //var pontoImpressao = //document.sorteio.textArea;
+      var pontoImpressao = document.getElementById('resultado');
+      imprimaResultado(nomeCurso, semente, embaralhada, vagas, pontoImpressao);
     }
-    resultado[i] = consumida[aleatorio];
-    consumida[aleatorio] = 0;
-  }
-  
-  return resultado;
-}
 
-function imprimaResultado(nomeCurso, semente, embaralhada, vagas, pontoImpressao, nomeCota, nomePolo) {
-  var conteudo = "";
-  conteudo += gereVisualDeInformacoes(semente);
-  conteudo += gereVisualDeCabecalhoDaLista(nomeCurso, nomeCota, nomePolo, semente);
-  conteudo += gereVisualDeListaDeSelecionados(embaralhada, vagas);
-  conteudo += gereVisualDeCabecalhoDaEspera(nomeCurso);
-  conteudo += gereVisualDeListaDeEspera(embaralhada, vagas);
-  conteudo += gereVisualDeFim();
-  conteudo += gereVisualDeInformacoesTecnicas(semente);
-  
-  
-  pontoImpressao.value = conteudo;
-  pontoImpressao.innerHTML = conteudo;
-}
+    function gereListaEmbaralhada(inscritos, semente) {
+      Math.seedrandom(semente);
+      var consumida = new Array(inscritos);
+      var resultado = new Array(inscritos);
+      for (var i = 0; i < inscritos; i++) {
+        consumida[i] = 1 + i;
+        resultado[i] = 0;
+      }
 
-function gereVisualDeCabecalhoDaLista(nomeCurso, nomeCota, nomePolo, semente){
-  var data = new Date(semente);
-  var nomeCurso = document.sorteio.nomeCurso.value;
-  var nomeCota = document.sorteio.nomeCota.value;
-  var nomePolo = document.sorteio.nomePolo.value;
+      for (var i = 0; i < inscritos; i++) {
+        var aleatorio = Math.floor(Math.random() * inscritos);
+        while (consumida[aleatorio] == 0) {
+          aleatorio = (1 + aleatorio) % inscritos;
+        }
+        resultado[i] = consumida[aleatorio];
+        consumida[aleatorio] = 0;
+      }
 
-  return "&emsp;&emsp;&emsp; Horário do sorteio: " + data.getDate() + "/" + (pad(data.getMonth()+1)) + "/" + pad(data.getFullYear()) + ", " + pad(data.getHours()) + ":" + pad(data.getMinutes()) + ":" + pad(data.getSeconds()) + "<H1>&emsp; &emsp;&emsp;&emsp;&emsp;&emsp; Lista <b>OFICIAL</b> do sorteio <br>&emsp; &emsp;&emsp;&emsp;&emsp;&emsp; Campus: " + nomePolo + "</H1><H2>&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;Curso:" +  nomeCurso  + "<br>&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;Cota:" + nomeCota + "</H2></H1><H2>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Candidatos Classificados</H2>";
+      return resultado;
+    }
 
-}
-
-function gereVisualDeListaDeSelecionados(lista, ultimaPosicao)
-{
-  var conteudo = "";
-  for(var i = 0; i < ultimaPosicao; i++)
-  {
-    conteudo +=  "<font size='5'><table width=40% ><tr> <td  width=20%  align=right>" + padSpaces(lista[i], lista.length) + "(" + (i+1) + "º) número </td><td width=20% align=right><b>&emsp;&emsp;&emsp; "  + lista[i] +"</td></tr></table></font></b>";
-
-   
-  }
-  return conteudo;
-}
-
-function gereVisualDeCabecalhoDaEspera(nomeCurso){
-  return " <H2>&emsp;&emsp;&emsp;&emsp;&emsp;  Candidatos em Lista de Espera " + "</H2>";
-}
-
-function gereVisualDeListaDeEspera(lista, ultimaPosicao)
-{  
-  var conteudo = "";
-  
-  for(var i = ultimaPosicao; i < lista.length; i++)   
-  {
-  
-   conteudo += "<font size='5'><table width=40% ><tr> <td  width=20%  align=right>" + padSpaces(lista[i], lista.length) + "(" + (parseInt(i)+1) + "º) número </td><td width=20% align=right> <b>&emsp;&emsp;&emsp; " + lista[i] +"</td></tr></table></font></b>";     
-
-   
-  }
- 
-  return conteudo;
-}
+    function imprimaResultado(nomeCurso, semente, embaralhada, vagas, pontoImpressao, nomeCota, nomePolo) {
+      var conteudo = "";
+      conteudo += gereVisualDeInformacoes(semente);
+      conteudo += gereVisualDeCabecalhoDaLista(nomeCurso, nomeCota, nomePolo, semente);
+      conteudo += gereVisualDeListaDeSelecionados(embaralhada, vagas);
+      conteudo += gereVisualDeCabecalhoDaEspera(nomeCurso);
+      conteudo += gereVisualDeListaDeEspera(embaralhada, vagas);
+      conteudo += gereVisualDeFim();
+      conteudo += gereVisualDeInformacoesTecnicas(semente);
 
 
+      pontoImpressao.value = conteudo;
+      pontoImpressao.innerHTML = conteudo;
+    }
+
+    function gereVisualDeCabecalhoDaLista(nomeCurso, nomeCota, nomePolo, semente) {
+      var data = new Date(semente);
+      var nomeCurso = document.sorteio.nomeCurso.value;
+      var nomeCota = document.sorteio.nomeCota.value;
+      var nomePolo = document.sorteio.nomePolo.value;
+
+      return "&emsp;&emsp;&emsp; <a> Horario do sorteio: </a>" + data.getDate() + "/" + (pad(data.getMonth() + 1)) + "/" + pad(data.getFullYear()) + ", " + pad(data.getHours()) + ":" + pad(data.getMinutes()) + ":" + pad(data.getSeconds()) + "<H1>&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;<a> Lista <b>OFICIAL</b> do sorteio <br>&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;<a> Campus: " + nomePolo + "<H2>&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;<a>Curso: " + nomeCurso + "<br>&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;Cota: " + nomeCota + "</H2></H1><H2>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Candidatos Classificados</a></H2>";
+
+    }
+
+    function gereVisualDeListaDeSelecionados(lista, ultimaPosicao) {
+      var conteudo = "";
+      for (var i = 0; i < ultimaPosicao; i++) {
+        conteudo += "<font size='5'><table width=40% ><tr> <td  width=20%  align=right>" + padSpaces(lista[i], lista.length) + "<a>(" + (i + 1) + "&deg;) numero </td><td width=20% align=right><b>&emsp;&emsp;&emsp; " + lista[i] + "</a></td></tr></table></font></b>";
 
 
-function gereVisualDeFim() {
+      }
+      return conteudo;
+    }
 
-  return "<br/><b><H4>&emsp;&emsp;&emsp;.......................................... FIM ...........................................</H4></b>";
-  
-  
-  
-  
-}
- 
- 
- 
- 
-function gereVisualDeInformacoesTecnicas(semente) {
-  var conteudo = "<H3>Informações técnicas do sistema</H3>";
-  conteudo += "<b>Semente utilizada:</b> \"" + semente + "\"<br/>";
-  conteudo += "<b>platform:</b> " + navigator.platform + "<br/>";
-  conteudo += "<b>appName:</b> " + navigator.appName + "<br/>";
-  conteudo += "<b>Versão deste sistema:</b> 17/11/2021<br/>"
-  
-  return conteudo;
-}
-  function gereVisualDeInformacoes(semente) {
-  
-  var conteudo = "<b>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Semente utilizada:</b> \"" + semente + "\"<br/>";
-  
-  
-  return conteudo;
-}
-function pad(number) {
-     return (number < 10 ? '0' : '') + number;
-   
-}
+    function gereVisualDeCabecalhoDaEspera(nomeCurso) {
+      return " <H2>&emsp;&emsp;&emsp;&emsp;&emsp;<a>  Candidatos em Lista de Espera </a>" + "</H2>";
+    }
 
-function padSpaces(atual, maximo) {
-     var conteudo = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-     var espacosExtras = (maximo + "").length-(atual + "").length;
+    function gereVisualDeListaDeEspera(lista, ultimaPosicao) {
+      var conteudo = "";
 
-     for(var i = 1; i <= espacosExtras; i++){
+      for (var i = ultimaPosicao; i < lista.length; i++) {
+
+        conteudo += "<font size='5'><table width=40% ><tr> <td  width=20%  align=right>" + padSpaces(lista[i], lista.length) + "<a>(" + (parseInt(i) + 1) + "&deg;) numero </td><td width=20% align=right> <b>&emsp;&emsp;&emsp;" + lista[i] + "</a></td></tr></table></font></b>";
+
+
+      }
+
+      return conteudo;
+    }
+
+
+
+
+    function gereVisualDeFim() {
+
+      return "<br/><b><H4><a>&emsp;&emsp;&emsp;.......................................... FIM ...........................................</a></H4></b>";
+
+
+
+
+    }
+
+
+
+
+    function gereVisualDeInformacoesTecnicas(semente) {
+      var conteudo = "<H3>Informacoes tecnicas do sistema</H3>";
+      conteudo += "<a>Semente utilizada:</a> \"" + semente + "\"<br/>";
+      conteudo += "<a>platform:</a> " + navigator.platform + "<br/>";
+      conteudo += "<a>appName:</a> " + navigator.appName + "<br/>";
+      conteudo += "<a>Versï¿½o deste sistema:</a> 17/11/2021<br/>"
+
+      return conteudo;
+    }
+    function gereVisualDeInformacoes(semente) {
+
+      var conteudo = "<a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Semente utilizada:</a> \"" + semente + "\"<br/>";
+
+
+      return conteudo;
+    }
+    function pad(number) {
+      return (number < 10 ? '0' : '') + number;
+
+    }
+
+    function padSpaces(atual, maximo) {
+      var conteudo = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+      var espacosExtras = (maximo + "").length - (atual + "").length;
+
+      for (var i = 1; i <= espacosExtras; i++) {
         conteudo += "&nbsp;";
-     }
+      }
 
-     return conteudo;
-}
+      return conteudo;
+    }
 
-</script>
-</head> 
+  </script>
+</head>
+
 <body>
-<br> 
-                                       <img src="logo.png" />
+  <img src="ifpr.png" id="logo" />
   <form name="sorteio">
-  <table border=0>
-  <pre> <tr>
+    <table border=0>
+      <pre> <tr>
   
      <td> </pre>
-     &emsp;&emsp;&emsp;Campus: 
-    </td>
-    <td colspan=13>
-    <input type="text" name="nomePolo" size=75 maxlength=100>
-    </td>
-   </tr>
-   <tr>
-    <td> 
-     &emsp;&emsp;&emsp;Curso: 
-    </td>
-    <td colspan=3>
-    <input type="text" name="nomeCurso" size=75 maxlength=100>
-    </td>
-   </tr>
-   <tr>
-    <td> 
-    &emsp;&emsp;&emsp;Cota: 
-    </td>
-    <td colspan=3>
-    <input type="text" name="nomeCota" size=75 maxlength=100>
-    </td>
-   </tr>
-   <tr>
-    <td> 
-     &emsp;&emsp;&emsp;Total de Inscritos: 
-    </td>
-    <td colspan=1>
-    <input type="text" name="totalInscritos" size=10 maxlength=5>
-    </td>
-    <td> 
-     &emsp;&emsp;&emsp;Vagas: 
-    </td>
-    <td colspan=2>
-    <input type="text" name="vagas" size=10 maxlength=5>
-    </td>
-   </tr>
-   <tr>
-    <td> &emsp;&emsp;&emsp;
-    &emsp;&emsp;&emsp;<input type="button" value="Gerar Lista" onclick="gereEImprimaResultado()">
-    </td>
-    &emsp;&emsp;&emsp;<td width=270> 
-<!--***EM CASO DE AUDITORIA: TROQUE O VALOR DE style DE 'visibility:hidden' para 'visibility:visible', e descomente o texto "Inserir semente manualmente", que aparece abaixo***-->
-    &emsp;&emsp;&emsp;<input type="checkbox" name="sementeManual" onclick="document.sorteio.semente.disabled = !this.checked;" style='visibility:visible'>Inserir semente manual
-    </td>
-    <td>
-<!--***EM CASO DE AUDITORIA: Descomente o texto "Semente: ", que aparece abaixo***-->
-&emsp;&emsp;&emsp;Semente:
-    </td>
-    <td>
-<!--***EM CASO DE AUDITORIA: TROQUE O VALOR DE style DE 'visibility:hidden' para 'visibility:visible'***-->
-    <input type="text" name="semente" size=20 maxlength=50 disabled style='visibility:visible'>
-    </td>
-   </tr> 
-  </table>
-  <p id="resultado"></p>
- <!--<textarea name="textArea" rows=26 cols=92 readonly>
+      &emsp;&emsp;&emsp;<a href=""> Campus: </a>
+      </td>
+      <td colspan=13>
+        <input type="text" name="nomePolo" size=75 maxlength=100>
+      </td>
+      </tr>
+      <tr>
+        <td>
+          &emsp;&emsp;&emsp; <a href=""> Curso: </a>
+        </td>
+        <td colspan=3>
+          <input type="text" name="nomeCurso" size=75 maxlength=100>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          &emsp;&emsp;&emsp;<a href=""> Cota:</a>
+        </td>
+        <td colspan=3>
+          <input type="text" name="nomeCota" size=75 maxlength=100>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          &emsp;&emsp;<a href=""> Total de Inscritos: </a>
+        </td>
+        <td colspan=1>
+          <input type="text" name="totalInscritos" size=10 maxlength=5>
+        </td>
+        <td>
+          &emsp;&emsp;&emsp;<a href=""> Vagas: </a>
+        </td>
+        <td colspan=2>
+          <input type="text" name="vagas" size=10 maxlength=5>
+        </td>
+      </tr>
+      <tr>
+        <td> &emsp;&emsp;&emsp;
+          &emsp;&emsp;&emsp;<input type="button" value="Gerar Lista" onclick="gereEImprimaResultado()">
+        </td>
+        &emsp;&emsp;&emsp;<td width=270>
+          <!--***EM CASO DE AUDITORIA: TROQUE O VALOR DE style DE 'visibility:hidden' para 'visibility:visible', e descomente o texto "Inserir semente manualmente", que aparece abaixo***-->
+          &emsp;&emsp;&emsp;<input type="checkbox" name="sementeManual"
+            onclick="document.sorteio.semente.disabled = !this.checked;" style='visibility:visible'><a href=""> Inserir
+            semente manual </a>
+        </td>
+        <td>
+          <!--***EM CASO DE AUDITORIA: Descomente o texto "Semente: ", que aparece abaixo***-->
+          &emsp;&emsp;<a href=""> Semente: </a>
+        </td>
+        <td>
+          <!--***EM CASO DE AUDITORIA: TROQUE O VALOR DE style DE 'visibility:hidden' para 'visibility:visible'***-->
+          <input type="text" name="semente" size=20 maxlength=50 disabled style='visibility:visible'>
+        </td>
+      </tr>
+    </table>
+    <p id="resultado"></p>
+    <!--<textarea name="textArea" rows=26 cols=92 readonly>
  </textarea>-->
- </form>
+  </form>
 </body>
+
 </html>
