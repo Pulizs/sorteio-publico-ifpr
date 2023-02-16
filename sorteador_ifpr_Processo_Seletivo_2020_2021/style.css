@@ -14,17 +14,13 @@ body {
     height: 30vh;
 }
 
-tr{
-    align-items: center;
-}
-
 a {
     text-decoration: none;
     color: black;
     font-family: 'Kanit', sans-serif;
 }
 
-input{
+input {
     padding-left: 5px;
     padding-right: 5px;
     background-color: #F0F3F4;
